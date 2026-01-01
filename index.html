@@ -106,17 +106,25 @@
         gap: 15px; 
         margin-top: 20px;
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
     }
 
-    /* МАЛЕНЬКИЕ КНОПКИ (перебиваем width: 100%) */
-    .btn-small {
-        padding: 10px 15px !important; 
-        font-size: 14px !important;
-        width: auto !important; 
-        flex: 1; /* Чтобы кнопки были одинакового размера в ряду */
-        white-space: nowrap; /* Чтобы текст не переносился */
-    }
+    /* МАЛЕНЬКИЕ КНОПКИ */
+.btn-small {
+    /* 1. Убираем flex: 1, чтобы кнопка не растягивалась на всё свободное место */
+    flex: none !important; 
+    
+    /* 2. Оставляем ширину по размеру текста */
+    width: auto !important; 
+    
+    /* 3. Уменьшаем padding (первое число — высота, второе — ширина) */
+    /* Было 10px 15px, сделаем 6px 12px для компактности */
+    padding: 6px 12px !important; 
+    
+    font-size: 14px !important;
+    white-space: nowrap;
+}
+
     
     .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 </style>
