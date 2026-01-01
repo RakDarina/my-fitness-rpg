@@ -11,135 +11,98 @@
             --bg: #f5f6fa; 
             --success: #00b894; 
             --danger: #d63031;
-            --hover-border: #00b894; /* Зеленый контур */
-            --active-bg: #e0e0e0;    /* Светло-серый фон */
+            --hover-border: #00b894;
+            --active-bg: #e0e0e0;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            padding-top: 80px; /* Отступ сверху, чтобы контент не залезал под шапку */
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-top: 80px; }
 
-        /* Шапка сайта */
+        /* Шапка */
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-            box-sizing: border-box;
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: white; display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; box-sizing: border-box;
         }
-
-        .site-title {
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: #2d3436;
-            flex: 1;
-        }
-
-        .nav {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex: 2;
-        }
-
+        .site-title { font-weight: 800; font-size: 1.2rem; color: #2d3436; }
+        .nav { display: flex; gap: 10px; }
         .nav-btn {
-            border: 2px solid transparent; /* Резервируем место под контур */
-            background: none;
-            color: #636e72;
-            font-weight: 600;
-            padding: 8px 20px;
-            cursor: pointer;
-            border-radius: 50px; /* Делаем овальную форму */
-            transition: all 0.3s ease;
-            outline: none;
+            border: 2px solid transparent; background: none; color: #636e72; font-weight: 600;
+            padding: 8px 20px; cursor: pointer; border-radius: 50px; transition: all 0.3s ease;
+        }
+        .nav-btn:hover { border-color: var(--hover-border); color: var(--hover-border); }
+        .nav-btn.active { background-color: var(--active-bg); color: #2d3436; }
+
+        /* Контейнер персонажа и данных */
+        .hero-section { 
+            background: white; padding: 25px; border-radius: 20px; 
+            display: flex; gap: 30px; align-items: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
 
-        /* Эффект при наведении */
-        .nav-btn:hover {
-            border-color: var(--hover-border);
-            color: var(--hover-border);
+        .hero-container {
+            width: 150px; height: 150px;
+            display: flex; justify-content: center; align-items: center;
+            background: #fcfcfc; border-radius: 15px; border: 1px solid #eee;
+            overflow: hidden;
         }
 
-        /* Эффект активной кнопки */
-        .nav-btn.active {
-            background-color: var(--active-bg);
-            border-color: transparent;
-            color: #2d3436;
+        .hero-img {
+            max-width: 100%; max-height: 100%;
+            object-fit: contain;
+            animation: breathe 4s ease-in-out infinite;
         }
 
-        /* Заглушка для симметрии справа (чтобы меню было точно по центру) */
-        .header-right {
-            flex: 1;
-            text-align: right;
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
         }
 
-        /* Остальные стили контента */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        .stat-item { font-size: 15px; color: #2d3436; }
+        .stat-label { color: #636e72; font-size: 12px; display: block; }
+
+        /* Кнопки */
         .tab-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .tab-content.active { display: block; }
-        .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; display: inline-block; }
-        .hero-section { display: flex; background: white; padding: 20px; border-radius: 15px; gap: 20px; margin-bottom: 20px; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .hero-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #eee; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; margin-top: 15px; }
-        .day { padding: 15px 5px; text-align: center; border-radius: 8px; border: 1px solid #f0f0f0; }
-        .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
-        .modal-content input { width: 100%; margin-bottom: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .btn { border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; width: 100%; font-weight: bold; transition: opacity 0.2s; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn { 
+            border: none; padding: 14px; border-radius: 12px; color: white; 
+            cursor: pointer; width: 100%; font-weight: bold; transition: all 0.2s; 
+        }
+        .btn:hover { filter: brightness(0.85); }
+        .btn:active { filter: brightness(0.7); }
         .btn-add { background: var(--primary); }
+        .btn-done { background: var(--success); }
+        .btn-undo { background: var(--danger); }
+        
+        .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .day { padding: 15px 5px; text-align: center; border-radius: 10px; border: 1px solid #f0f0f0; }
+        .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
+
+        .modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 2000; 
+            justify-content: center; align-items: center; 
+        }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 400px; }
         .
-        btn-undo { background: var(--danger); }
-        .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        /* Базовый стиль для всех кнопок */
-.btn {
-    border: none;
-    padding: 12px;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s ease; /* Плавный переход цвета */
-}
-
-/* 1. СОСТОЯНИЕ ПРИ НАВЕДЕНИИ (:hover) */
-/* Мы используем filter: brightness, чтобы кнопка сама становилась темнее, какой бы цвет у нее ни был */
-.btn:hover {
-    filter: brightness(0.85); /* Затемняем на 15% */
-}
-
-/* 2. СОСТОЯНИЕ ПРИ НАЖАТИИ (:active) */
-.btn:active {
-    filter: brightness(0.7); /* Затемняем еще сильнее (на 30%) */
-}
-
-/* Специфические цвета для кнопок (если они еще не прописаны) */
-.btn-add { background-color: #6c5ce7; }    /* Фиолетовая (Добавить/Сохранить) */
-.btn-undo { background-color: #d63031; }   /* Красная (Отменить) */
-.btn-hist { background-color: #a29bfe; }   /* Светло-фиолетовая (История) */
+        modal-content input { width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        
+        .item-card { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="site-title">Мои достижения</div>
-        
         <nav class="nav">
             <button class="nav-btn active" data-tab="tab-data">Данные</button>
             <button class="nav-btn" data-tab="tab-tasks">Задания</button>
             <button class="nav-btn" data-tab="tab-shop">Магазин</button>
         </nav>
-
         <div class="header-right">
             <div class="star-counter">⭐️ <span id="starDisplay">0</span></div>
         </div>
@@ -147,57 +110,52 @@
 
     <div id="tab-data" class="tab-content active">
         <div class="hero-section">
-            <img src="https://via.placeholder.com/100?text=Герой" alt="Character" class="hero-img">
-            <div class="stats-grid" id="currentStats"><div>Добавьте ваши первые данные</div></div>
+            <div class="hero-container">
+                <img id="characterImage" src="stage1.png" alt="Персонаж" class="hero-img">
+            </div>
+            <div class="stats-grid" id="currentStats">
+                <div style="grid-column: 1/3">Заполните параметры, чтобы увидеть героя</div>
+            </div>
         </div>
         <button class="btn btn-add" id="openAddStats">➕ Добавить параметры</button>
-        <button class="btn btn-add" id="openHistory" style="background: #a29bfe; margin-top: 10px;">📜 Предыдущие записи</button>
+        <button class="btn" id="openHistory" style="background: #a29bfe; margin-top: 10px;">📜 Предыдущие записи</button>
     </div>
 
     <div id="tab-tasks" class="tab-content">
         <div style="text-align:center; margin-bottom: 20px;"><b>1 час на дорожке = 1 ⭐️</b></div>
         <div style="display:flex; justify-content: space-between; align-items: center;">
-            <button id="prevMonth" style="border:none; background:none; cursor:pointer; font-size:20px;">◀️</button>
-            <span id="monthYear" style="font-weight:bold; font-size: 1.1rem;"></span>
-            <button id="nextMonth" style="border:none; background:none; cursor:pointer; font-size:20px;">▶️</button>
+            <button id="prevMonth">◀️</button>
+            <span id="monthYear" style="font-weight:bold;"></span>
+            <button id="nextMonth">▶️</button>
         </div>
         <div class="calendar-grid" id="calendar"></div>
         <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn" style="background: var(--success);" id="doTask">✅ Выполнить</button>
+            <button class="btn btn-done" id="doTask">✅ Выполнить</button>
             <button class="btn btn-undo" id="undoTask">❌ Отменить</button>
         </div>
     </div>
 
     <div id="tab-shop" class="tab-content">
-        <div class="shop-title" style="font-weight:bold; margin-bottom:10px;">🛒 В магазине</div>
+        <div style="font-weight:bold; margin-bottom:15px;">🛒 Доступные награды</div>
         <div id="shopList"></div>
-        <div class="shop-title" style="font-weight:bold; margin:20px 0 10px;">🎒 Уже взяли</div>
-        <div id="inventoryList"></div>
-        <button class="btn btn-add" id="openAddItem" style="margin-top:20px;">➕ Добавить новый товар</button>
+        <button class="btn btn-add" id="openAddItem" style="margin-top:20px;">➕ Добавить свой приз</button>
     </div>
 
     <div id="addStatsModal" class="modal">
         <div class="modal-content">
             <form id="statsForm">
-                <h3>Новая запись</h3>
-                <input type="number" step="0.1" name="weight" placeholder="Вес (кг)" required>
-                <input type="number" step="0.1" name="fat" placeholder="Жир (%)">
-                <input type="number" step="0.1" name="protein" placeholder="Белок">
-                <input type="number" step="0.1" name="water" placeholder="Вода">
-                <input type="number" step="0.1" name="waist" placeholder="Талия (см)">
-                <input type="number" step="0.1" name="chest" placeholder="Грудь (см)">
-                <input type="number" step="0.1" name="hips" placeholder="Бедра (см)">
-                <input type="number" step="0.1" name="thigh" placeholder="1 бедро (см)">
-                <input type="number" step="0.1" name="bicep" placeholder="Бицепс (см)">
-                <button type="submit" class="btn btn-add">Сохранить</button>
-                <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
+                <h3>Новый замер</h3>
+                <input type="number" step="0.1" name="weight" placeholder="Ваш вес (кг)" required>
+                <input type="number" step="0.1" name="waist" placeholder="Обхват талии (см)">
+                <button type="submit" class="btn btn-add">Сохранить результат</button>
+                <button type="button" class="btn btn-undo close-modal" style="margin-top:10px">Отмена</button>
             </form>
         </div>
     </div>
 
     <div id="historyModal" class="modal">
-        <div class="modal-content">
-            <h3>История записей</h3>
+        <div class="modal-content" style="max-height: 70vh; overflow-y: auto;">
+            <h3>История веса</h3>
             <div id="historyList"></div>
             <button class="btn btn-undo close-modal">Закрыть</button>
         </div>
@@ -206,28 +164,43 @@
     <div id="addItemModal" class="modal">
         <div class="modal-content">
             <form id="itemForm">
-                <h3>Новый товар</h3>
-                <input type="text" name="name" placeholder="Название" required>
-                <input type="number" name="price" placeholder="Цена (звезд)" required>
+                <h3>Что купим?</h3>
+                <input type="text" name="name" placeholder="Название (например: Поход в кино)" required>
+                <input type="number" name="price" placeholder="Цена в звездах" required>
                 <button type="submit" class="btn btn-add">Добавить в магазин</button>
-                <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
+                <button type="button" class="btn btn-undo close-modal" style="margin-top:10px">Отмена</button>
             </form>
         </div>
     </div>
 
     <script>
-        // JS остается практически тем же, просто адаптируем под новую структуру
         document.addEventListener('DOMContentLoaded', function() {
-            var state = JSON.parse(localStorage.getItem('fitness_rpg_v5')) || {
+            var state = JSON.parse(localStorage.
+                                   getItem('fitness_rpg_v6')) || {
                 stars: 0, stats: [], completedDates: [], shop: [], inventory: []
             };
 
             var save = function() {
-                localStorage.setItem('fitness_rpg_v5', JSON.stringify(state));
+                localStorage.setItem('fitness_rpg_v6', JSON.stringify(state));
                 document.getElementById('starDisplay').innerText = state.stars;
             };
 
-            // Переключение вкладок
+            // ЛОГИКА ОПРЕДЕЛЕНИЯ ПЕРСОНАЖА
+            var updateCharacter = function(weight) {
+                var imgElement = document.getElementById('characterImage');
+                var stage = "stage1.png"; // По умолчанию самый худой
+
+                if (weight >= 68) { stage = "stage6.png"; }
+                else if (weight >= 65) { stage = "stage5.png"; }
+                else if (weight >= 62) { stage = "stage4.png"; }
+                else if (weight >= 59) { stage = "stage3.png"; }
+                else if (weight >= 56) { stage = "stage2.png"; }
+                else { stage = "stage1.png"; }
+
+                imgElement.src = stage;
+            };
+
+            // Навигация
             document.querySelectorAll('.nav-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
@@ -246,53 +219,56 @@
             document.getElementById('openHistory').onclick = function() { renderHistory(); openModal('historyModal'); };
             document.querySelectorAll('.close-modal').forEach(function(b) { b.onclick = closeModal; });
 
-            // Данные
+            // Сохранение веса
             document.getElementById('statsForm').onsubmit = function(e) {
                 e.preventDefault();
+                var w = parseFloat(e.target.weight.value);
                 var entry = {
                     id: Date.now(),
                     date: new Date().toLocaleDateString(),
-                    weight: e.target.weight.value, fat: e.target.fat.value,
-                    protein: e.target.protein.value, water: e.target.water.value,
-                    waist: e.target.waist.value, chest: e.target.chest.value,
-                    hips: e.target.hips.value, thigh: e.target.thigh.value, bicep: e.target.bicep.value
+                    weight: w,
+                    waist: e.target.waist.value
                 };
-                state.stats.push(entry); save(); renderStats(); closeModal(); e.target.reset();
+                state.stats.push(entry); 
+                save(); 
+                renderStats(); 
+                updateCharacter(w); // Обновляем картинку сразу
+                closeModal(); 
+                e.target.reset();
             };
 
             var renderStats = function() {
                 var last = state.stats[state.stats.length - 1];
                 if (!last) return;
                 document.getElementById('currentStats').innerHTML = 
-                    '<div style="grid-column: 1/3; color: #636e72;">Последнее: ' + last.date + '</div>' +
-                    '<div>⚖️ Вес: ' + last.weight + ' кг</div><div>💧 Вода: ' + last.water + '</div>' +
-                    '<div>🔥 Жир: ' + last.fat + '%</div><div>🥩 Белок: ' + last.protein + '</div>' +
-                    '<div>📏 Талия: ' + last.waist + ' см</div><div>📏 Грудь: ' + last.chest + ' см</div>' +
-                    '<div>📏 Бедра: ' + last.hips + ' см</div><div>💪 Бицепс: ' + last.bicep + ' см</div>';
+                    '<div style="grid-column: 1/3; font-weight:bold; margin-bottom:5px;">Результат от ' + last.date + '</div>' +
+                    '<div class="stat-item"><span class="stat-label">Текущий вес</span>' + last.weight + ' кг</div>' +
+                    '<div class="stat-item"><span class="stat-label">Обхват талии</span>' + last.waist + ' см</div>';
+                updateCharacter(last.weight);
+            };
+
+            // История
+            var renderHistory = function() {
+                var hList = document.getElementById('historyList'); hList.innerHTML = '';
+                state.stats.slice().reverse().forEach(function(s) {
+                    hList.innerHTML += '<div style="background:#f8f9fa; padding:10px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between;">' +
+                        '<span>' + s.
+                        date + ': <b>' + s.weight + ' кг</b></span>' +
+                        '<button onclick="deleteStat(' + s.id + ')" style="border:none; background:none; cursor:pointer;">🗑️</button></div>';
+                });
             };
 
             window.deleteStat = function(id) {
                 state.stats = state.stats.filter(function(s) { return s.id !== id; });
                 save(); renderStats(); renderHistory();
-                };
-
-            var renderHistory = function() {
-                var hList = document.getElementById('historyList'); hList.innerHTML = '';
-                state.stats.slice().reverse().forEach(function(s) {
-                    hList.innerHTML += '<div class="item-card" style="flex-direction: column; align-items: flex-start;">' +
-                        '<div style="width:100%"><button class="btn-del" style="background:#ff7675; color:white; border:none; padding:5px; border-radius:5px; float:right; cursor:pointer;" onclick="window.deleteStat(' + s.id + ')">Удалить</button>' +
-                        '<b>' + s.date + '</b></div>' +
-                        '<div style="font-size: 13px; margin-top:5px;">Вес: ' + s.weight + 'кг, Жир: ' + s.fat + '%, Талия: ' + s.waist + '...</div></div>';
-                });
             };
 
-            // Календарь
+            // Календарь (упрощенная версия)
             var currDate = new Date();
             var renderCalendar = function() {
                 var grid = document.getElementById('calendar'); grid.innerHTML = '';
                 var m = currDate.getMonth(); var y = currDate.getFullYear();
-                var monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-                document.getElementById('monthYear').innerText = monthNames[m] + ' ' + y;
+                document.getElementById('monthYear').innerText = (m + 1) + ' / ' + y;
                 var days = new Date(y, m + 1, 0).getDate();
                 for (var i = 1; i <= days; i++) {
                     var d = document.createElement('div'); d.className = 'day';
@@ -301,22 +277,11 @@
                     d.innerText = i; grid.appendChild(d);
                 }
             };
-
-            document.getElementById('prevMonth').onclick = function() { currDate.setMonth(currDate.getMonth() - 1); renderCalendar(); };
-            document.getElementById('nextMonth').onclick = function() { currDate.setMonth(currDate.getMonth() + 1); renderCalendar(); };
             
             document.getElementById('doTask').onclick = function() {
                 var d = new Date(); var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
                 if (state.completedDates.indexOf(key) === -1) {
                     state.completedDates.push(key); state.stars += 1; save(); renderCalendar();
-                } else { alert("Сегодня задание уже выполнено!"); }
-            };
-
-            document.getElementById('undoTask').onclick = function() {
-                var d = new Date(); var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-                if (state.completedDates.indexOf(key) !== -1) {
-                    state.completedDates = state.completedDates.filter(function(k) { return k !== key; });
-                    state.stars = Math.max(0, state.stars - 1); save(); renderCalendar();
                 }
             };
 
@@ -327,40 +292,20 @@
                 save(); renderShop(); closeModal(); e.target.reset();
             };
 
-            window.deleteShopItem = function(id) {
-                state.shop = state.shop.filter(function(i) { return i.id !== id; });
-                save(); renderShop();
-            };
-
             window.buyItem = function(id) {
                 var idx = state.shop.findIndex(function(i) { return i.id === id; });
                 var item = state.shop[idx];
                 if (state.stars >= item.price) {
-                    state.stars -= item.price; state.inventory.push(item); state.shop.splice(idx, 1);
+                    state.stars -= item.price; state.shop.splice(idx, 1);
                     save(); renderShop();
-                } else { alert("Недостаточно звезд!"); }
-            };
-
-            window.returnItem = function(id) {
-                var idx = state.inventory.findIndex(function(i) { return i.id === id; });
-                var item = state.
-                    inventory[idx];
-                state.stars += item.price; state.shop.push(item); state.inventory.splice(idx, 1);
-                save(); renderShop();
+                } else { alert("Нужно больше звезд!"); }
             };
 
             var renderShop = function() {
-                var sList = document.getElementById('shopList'); var iList = document.getElementById('inventoryList');
-                sList.innerHTML = '';
+                var sList = document.getElementById('shopList'); sList.innerHTML = '';
                 state.shop.forEach(function(item) {
                     sList.innerHTML += '<div class="item-card"><span>' + item.name + ' (' + item.price + '⭐️)</span>' +
-                        '<div><button onclick="window.deleteShopItem(' + item.id + ')" style="background:none; border:none; cursor:pointer;">🗑️</button>' +
-                        '<button class="btn-add" style="width:auto; padding:5px 10px; margin-left:10px;" onclick="window.buyItem(' + item.id + ')">Взять</button></div></div>';
-                });
-                iList.innerHTML = '';
-                state.inventory.forEach(function(item) {
-                    iList.innerHTML += '<div class="item-card"><span>' + item.name + '</span>' +
-                        '<button class="btn-undo" style="width:auto; padding:5px 10px;" onclick="window.returnItem(' + item.id + ')">Вернуть</button></div>';
+                        '<button class="btn btn-done" style="width:auto; padding:5px 15px;" onclick="buyItem(' + item.id + ')">Купить</button></div>';
                 });
             };
 
