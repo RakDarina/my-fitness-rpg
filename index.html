@@ -6,118 +6,120 @@
     <title>Мои достижения</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        :root { 
-            --primary: #6c5ce7; 
-            --bg: #f5f6fa; 
-            --success: #00b894; 
-            --danger: #d63031;
-            --hover-border: #00b894; 
-            --active-bg: #e0e0e0;    
-        }
+    :root { 
+        --primary: #6c5ce7; 
+        --bg: #f5f6fa; 
+        --success: #00b894; 
+        --danger: #d63031;
+        --hover-border: #00b894; 
+        --active-bg: #e0e0e0;    
+    }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            padding-top: 80px; 
-        }
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background: var(--bg); 
+        margin: 0; 
+        padding-top: 80px; 
+    }
 
-        .header {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: white; display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; box-sizing: border-box;
-        }
+    .header {
+        position: fixed; top: 0; left: 0; width: 100%;
+        background: white; display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000; box-sizing: border-box;
+    }
 
-        .site-title { font-weight: 800; font-size: 1.2rem; color: #2d3436; flex: 1; }
-        .nav { display: flex; gap: 10px; justify-content: center; flex: 2; }
-        .nav-btn {
-            border: 2px solid transparent; background: none; color: #636e72; font-weight: 600;
-            padding: 8px 20px; cursor: pointer; border-radius: 50px; transition: all 0.3s ease; outline: none;
-        }
-        .nav-btn:hover { border-color: var(--hover-border); color: var(--hover-border); }
-        .nav-btn.active { background-color: var(--active-bg); border-color: transparent; color: #2d3436; }
-        .header-right { flex: 1; text-align: right; }
+    .site-title { font-weight: 800; font-size: 1.2rem; color: #2d3436; flex: 1; }
+    .nav { display: flex; gap: 10px; justify-content: center; flex: 2; }
+    .nav-btn {
+        border: 2px solid transparent; background: none; color: #636e72; font-weight: 600;
+        padding: 8px 20px; cursor: pointer; border-radius: 50px; transition: all 0.3s ease; outline: none;
+    }
+    .nav-btn:hover { border-color: var(--hover-border); color: var(--hover-border); }
+    .nav-btn.active { background-color: var(--active-bg); border-color: transparent; color: #2d3436; }
+    .header-right { flex: 1; text-align: right; }
 
-        .tab-content { display: none; padding: 20px; max-width: 1600px; margin: 0 auto; }
-        .tab-content.active { display: block; }
-        .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; display: inline-block; }
-        
-        /* Стили персонажа */
-        /* 2. Настраиваем секцию, чтобы текст не прилипал к огромному герою */
-.hero-section { 
-    display: flex; 
-    flex-direction: row; 
-    align-items: center;    /* Центрируем всё по середине */
-    background: white; 
-    padding: 60px 40px; 
-    border-radius: 15px; 
-    gap: 40px; 
-    margin-bottom: 20px; 
-    min-height: 450px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-}
-        /* 1. Увеличиваем сам контейнер для картинки */
-.hero-container { 
-    width: 720px;   /* Было 120px, стало 360px (в 3 раза больше) */
-    height: 720px;  /* Было 120px, стало 360px */
-    flex-shrink: 0; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-        .hero-img { 
-            max-width: 100%; max-height: 100%; 
-            object-fit: contain; 
-        }
+    .tab-content { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+    .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; display: inline-block; }
+    
+    /* Блок персонажа */
+    .hero-section { 
+        display: flex; 
+        flex-direction: row; 
+        align-items: center; 
+        background: white; 
+        padding: 60px 40px; 
+        border-radius: 15px; 
+        gap: 40px; 
+        margin-bottom: 20px; 
+        min-height: 450px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    }
 
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+    .hero-container { 
+        width: 450px;  /* Оптимальный размер, чтобы данные справа поместились */
+        height: 450px; 
+        flex-shrink: 0; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+    }
 
-       .stats-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 15px; 
-    width: 100%; 
-    font-size: 16px; /* Чуть увеличим шрифт данных под стать герою */
-    border-top: 1px solid #eee; /* Отделим героя от цифр линией */
-    padding-top: 20px;
-}
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; margin-top: 15px; }
-        .day { padding: 15px 5px; text-align: center; border-radius: 8px; border: 1px solid #f0f0f0; }
-        .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
-        .modal-content input { width: 100%; margin-bottom: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        
-        .btn { border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.2s ease; }
-        .btn:hover { filter: brightness(0.85); }
-        .btn:active { filter: brightness(0.7); }
-        
-        .btn-add { background-color: #6c5ce7; }
-        .btn-undo { background-color: #d63031; }
-        .btn-hist { background-color: #a29bfe; }
-        /* Контейнер для кнопок, чтобы они встали в ряд */
-.data-buttons {
-    display: flex;
-    gap: 15px; /* Промежуток между кнопками */
-    margin-top: 20px;
-    width: 100%;
-}
+    .hero-img { 
+        max-width: 100%; 
+        max-height: 100%; 
+        object-fit: contain; 
+    }
 
-/* Новый класс для уменьшения кнопок */
-.btn-small {
-    padding: 10px 15px; /* Меньше отступы */
-    font-size: 14px;    /* Меньше текст */
-    width: auto;        /* Кнопка больше не растягивается на весь экран */
-    flex: 1;           /* Но обе кнопки будут одинаковой ширины */
-}
-        
-        .
-        item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    </style>
+    .stats-grid { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 15px; 
+        width: 100%; 
+        font-size: 18px; 
+        border-top: 1px solid #eee; 
+        padding-top: 20px;
+    }
+
+    /* Календарь */
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; margin-top: 15px; }
+    .day { padding: 15px 5px; text-align: center; border-radius: 8px; border: 1px solid #f0f0f0; }
+    .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
+    
+    /* Модалки */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
+    .modal-content input { width: 100%; margin-bottom: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+    
+    /* Кнопки */
+    .btn { border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.2s ease; }
+    .btn:hover { filter: brightness(0.85); }
+    .btn:active { filter: brightness(0.7); }
+    
+    .btn-add { background-color: #6c5ce7; }
+    .btn-undo { background-color: #d63031; }
+    .btn-hist { background-color: #a29bfe; }
+
+    /* КОНТЕЙНЕР ДЛЯ КНОПОК В РЯД */
+    .data-buttons {
+        display: flex;
+        gap: 15px; 
+        margin-top: 20px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* МАЛЕНЬКИЕ КНОПКИ (перебиваем width: 100%) */
+    .btn-small {
+        padding: 10px 15px !important; 
+        font-size: 14px !important;
+        width: auto !important; 
+        flex: 1; /* Чтобы кнопки были одинакового размера в ряду */
+        white-space: nowrap; /* Чтобы текст не переносился */
+    }
+    
+    .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+</style>
 </head>
 <body>
 
