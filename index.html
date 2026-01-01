@@ -101,6 +101,32 @@
         .
         btn-undo { background: var(--danger); }
         .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* Базовый стиль для всех кнопок */
+.btn {
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease; /* Плавный переход цвета */
+}
+
+/* 1. СОСТОЯНИЕ ПРИ НАВЕДЕНИИ (:hover) */
+/* Мы используем filter: brightness, чтобы кнопка сама становилась темнее, какой бы цвет у нее ни был */
+.btn:hover {
+    filter: brightness(0.85); /* Затемняем на 15% */
+}
+
+/* 2. СОСТОЯНИЕ ПРИ НАЖАТИИ (:active) */
+.btn:active {
+    filter: brightness(0.7); /* Затемняем еще сильнее (на 30%) */
+}
+
+/* Специфические цвета для кнопок (если они еще не прописаны) */
+.btn-add { background-color: #6c5ce7; }    /* Фиолетовая (Добавить/Сохранить) */
+.btn-undo { background-color: #d63031; }   /* Красная (Отменить) */
+.btn-hist { background-color: #a29bfe; }   /* Светло-фиолетовая (История) */
     </style>
 </head>
 <body>
