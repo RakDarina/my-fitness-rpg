@@ -43,8 +43,27 @@
         .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; display: inline-block; }
         
         /* Стили персонажа */
-        .hero-section { display: flex; background: white; padding: 20px; border-radius: 15px; gap: 20px; margin-bottom: 20px; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .hero-container { width: 120px; height: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        /* 2. Настраиваем секцию, чтобы текст не прилипал к огромному герою */
+.hero-section { 
+    display: flex; 
+    flex-direction: column; /* Теперь герой будет СВЕРХУ, а данные СНИЗУ */
+    align-items: center;    /* Центрируем всё по середине */
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    gap: 20px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
+}
+        /* 1. Увеличиваем сам контейнер для картинки */
+.hero-container { 
+    width: 360px;   /* Было 120px, стало 360px (в 3 раза больше) */
+    height: 360px;  /* Было 120px, стало 360px */
+    flex-shrink: 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
         .hero-img { 
             max-width: 100%; max-height: 100%; 
             object-fit: contain; 
@@ -56,7 +75,15 @@
             50% { transform: scale(1.05); }
         }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; font-size: 14px; }
+       .stats-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+    width: 100%; 
+    font-size: 16px; /* Чуть увеличим шрифт данных под стать герою */
+    border-top: 1px solid #eee; /* Отделим героя от цифр линией */
+    padding-top: 20px;
+}
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; margin-top: 15px; }
         .day { padding: 15px 5px; text-align: center; border-radius: 8px; border: 1px solid #f0f0f0; }
         .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
