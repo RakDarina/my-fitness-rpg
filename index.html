@@ -49,10 +49,11 @@
     flex-direction: row; 
     align-items: center;    /* Центрируем всё по середине */
     background: white; 
-    padding: 30px; 
+    padding: 60px 40px; 
     border-radius: 15px; 
     gap: 40px; 
     margin-bottom: 20px; 
+    min-height: 450px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
 }
         /* 1. Увеличиваем сам контейнер для картинки */
@@ -98,6 +99,21 @@
         .btn-add { background-color: #6c5ce7; }
         .btn-undo { background-color: #d63031; }
         .btn-hist { background-color: #a29bfe; }
+        /* Контейнер для кнопок, чтобы они встали в ряд */
+.data-buttons {
+    display: flex;
+    gap: 15px; /* Промежуток между кнопками */
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Новый класс для уменьшения кнопок */
+.btn-small {
+    padding: 10px 15px; /* Меньше отступы */
+    font-size: 14px;    /* Меньше текст */
+    width: auto;        /* Кнопка больше не растягивается на весь экран */
+    flex: 1;           /* Но обе кнопки будут одинаковой ширины */
+}
         
         .
         item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -124,8 +140,10 @@
             </div>
             <div class="stats-grid" id="currentStats"><div>Добавьте ваши первые данные</div></div>
         </div>
-        <button class="btn btn-add" id="openAddStats">➕ Добавить параметры</button>
-        <button class="btn" id="openHistory" style="background: #a29bfe; margin-top: 10px;">📜 Предыдущие записи</button>
+        <div class="data-buttons">
+    <button class="btn btn-add btn-small" id="openAddStats">➕ Добавить параметры</button>
+    <button class="btn btn-hist btn-small" id="openHistory">📜 Предыдущие записи</button>
+</div>
     </div>
 
     <div id="tab-tasks" class="tab-content">
