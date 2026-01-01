@@ -146,13 +146,19 @@
     </header>
 
     <div id="tab-data" class="tab-content active">
-        <div class="hero-section">
-            <img src="https://via.placeholder.com/100?text=Герой" alt="Character" class="hero-img">
-            <div class="stats-grid" id="currentStats"><div>Добавьте ваши первые данные</div></div>
+    <div class="hero-section" style="display: flex; gap: 20px; align-items: center; background: white; padding: 20px; border-radius: 20px;">
+        
+        <div class="hero-container" style="width: 150px; flex-shrink: 0;">
+            <img id="characterImage" src="stage1.png" style="width: 100%; height: auto;" alt="Персонаж">
         </div>
-        <button class="btn btn-add" id="openAddStats">➕ Добавить параметры</button>
-        <button class="btn btn-add" id="openHistory" style="background: #a29bfe; margin-top: 10px;">📜 Предыдущие записи</button>
+
+        <div id="currentStats" style="flex-grow: 1;">
+            <div>Введите данные веса</div>
+        </div>
+        
     </div>
+    <button class="btn btn-add" id="openAddStats" style="margin-top:20px;">➕ Добавить параметры</button>
+</div>
 
     <div id="tab-tasks" class="tab-content">
         <div style="text-align:center; margin-bottom: 20px;"><b>1 час на дорожке = 1 ⭐️</b></div>
@@ -218,6 +224,22 @@
     <script>
         // JS остается практически тем же, просто адаптируем под новую структуру
         document.addEventListener('DOMContentLoaded', function() {
+            // Функция, которая меняет картинку в зависимости от веса
+var updateCharacter = function(weight) {
+    var imgElement = document.getElementById('characterImage');
+    if (!imgElement) return; // Проверка, что картинка есть на странице
+
+    var stage = "stage1.png"; // Базовая стадия
+
+    if (weight >= 68) { stage = "stage6.png"; }
+    else if (weight >= 65) { stage = "stage5.png"; }
+    else if (weight >= 62) { stage = "stage4.png"; }
+    else if (weight >= 59) { stage = "stage3.png"; }
+    else if (weight >= 56) { stage = "stage2.png"; }
+    else { stage = "stage1.png"; }
+
+    imgElement.src = stage;
+};
             var state = JSON.parse(localStorage.getItem('fitness_rpg_v5')) || {
                 stars: 0, stats: [], completedDates: [], shop: [], inventory: []
             };
@@ -269,6 +291,15 @@
                     '<div>🔥 Жир: ' + last.fat + '%</div><div>🥩 Белок: ' + last.protein + '</div>' +
                     '<div>📏 Талия: ' + last.waist + ' см</div><div>📏 Грудь: ' + last.chest + ' см</div>' +
                     '<div>📏 Бедра: ' + last.hips + ' см</div><div>💪 Бицепс: ' + last.bicep + ' см</div>';
+                var renderStats = function() {
+    var last = state.stats[state.stats.length - 1];
+    if (!last) return;
+    
+    // Твой текущий код отрисовки текста...
+    
+    // ДОБАВЬ ЭТУ СТРОЧКУ В КОНЕЦ:
+    updateCharacter(parseFloat(last.weight));
+};
             };
 
             window.deleteStat = function(id) {
