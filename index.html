@@ -42,7 +42,6 @@
     .tab-content.active { display: block; }
     .star-counter { background: #ffd700; padding: 5px 15px; border-radius: 20px; font-weight: bold; display: inline-block; }
     
-    /* Блок персонажа */
     .hero-section { 
         display: flex; 
         flex-direction: row; 
@@ -57,7 +56,7 @@
     }
 
     .hero-container { 
-        width: 450px;  /* Оптимальный размер, чтобы данные справа поместились */
+        width: 450px; 
         height: 450px; 
         flex-shrink: 0; 
         display: flex; 
@@ -81,17 +80,14 @@
         padding-top: 20px;
     }
 
-    /* Календарь */
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; margin-top: 15px; }
     .day { padding: 15px 5px; text-align: center; border-radius: 8px; border: 1px solid #f0f0f0; }
     .day.completed { background: #e8f5e9; color: var(--success); font-weight: bold; }
     
-    /* Модалки */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
     .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
     .modal-content input { width: 100%; margin-bottom: 12px; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
     
-    /* Кнопки */
     .btn { border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; width: 100%; font-weight: bold; transition: all 0.2s ease; }
     .btn:hover { filter: brightness(0.85); }
     .btn:active { filter: brightness(0.7); }
@@ -100,7 +96,6 @@
     .btn-undo { background-color: #d63031; }
     .btn-hist { background-color: #a29bfe; }
 
-    /* КОНТЕЙНЕР ДЛЯ КНОПОК В РЯД */
     .data-buttons {
         display: flex;
         gap: 100px; 
@@ -109,26 +104,15 @@
         justify-content: center;
     }
 
-    /* МАЛЕНЬКИЕ КНОПКИ */
-.btn-small {
-    /* 1. Убираем flex: 1, чтобы кнопка не растягивалась на всё свободное место */
-    flex: none !important; 
-    
-    /* 2. Оставляем ширину по размеру текста */
-    width: auto !important; 
-    
-    /* 3. Уменьшаем padding (первое число — высота, второе — ширина) */
-    /* Было 10px 15px, сделаем 6px 12px для компактности */
-    padding: 25px 100px !important; 
-    
-    font-size: 15px !important;
-    white-space: nowrap;
+    .btn-small {
+        flex: none !important; 
+        width: auto !important; 
+        padding: 25px 100px !important;
+        font-size: 15px !important;
+        white-space: nowrap;
+        border-radius: 50px !important;
+    }
 
-    /*скругление*/
-    border-radius: 50px !important;
-}
-
-    
     .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 </style>
 </head>
@@ -154,42 +138,40 @@
             <div class="stats-grid" id="currentStats"><div>Добавьте ваши первые данные</div></div>
         </div>
         <div class="data-buttons">
-    <button class="btn btn-add btn-small" id="openAddStats">➕ Добавить параметры</button>
-    <button class="btn btn-hist btn-small" id="openHistory">📜 Предыдущие записи</button>
-</div>
+            <button class="btn btn-add btn-small" id="openAddStats">➕ Добавить параметры</button>
+            <button class="btn btn-hist btn-small" id="openHistory">📜 Предыдущие записи</button>
+        </div>
     </div>
 
-     <div id="tab-tasks" class="tab-content">
+    <div id="tab-tasks" class="tab-content">
         <div style="text-align:center; margin-bottom: 20px;"><b>1 час на дорожке = 1 ⭐️</b></div>
         <div style="display:flex; justify-content: space-between; align-items: center;">
-    <button id="prevMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
-        <img src="lev.png" alt="Назад" style="width: 30px; height: auto;">
-    </button>
-    
-    <span id="monthYear" style="font-weight:bold; font-size: 1.1rem;"></span>
-    
-    <button id="nextMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
-        <img src="prav.png" alt="Вперед" style="width: 30px; height: auto;">
-    </button>
-</div>
+            <button id="prevMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
+                <img src="lev.png" alt="Назад" style="width: 30px; height: auto;">
+            </button>
+            <span id="monthYear" style="font-weight:bold; font-size: 1.1rem;"></span>
+            <button id="nextMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
+                <img src="prav.png" alt="Вперед" style="width: 30px; height: auto;">
+            </button>
+        </div>
         <div class="calendar-grid" id="calendar"></div>
-        
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn" style="background: var(--success);" id="doTask">✅ Выполнить</button>
             <button class="btn btn-undo" id="undoTask">❌ Отменить</button>
         </div>
-         <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
 
         <div style="font-weight:bold; margin-bottom:10px;">🎯 Глобальные цели</div>
         <div id="goalsList"></div>
         <button class="btn btn-add" id="openAddGoal" style="margin-top:10px;">➕ Добавить цель</button>
 
         <div style="font-weight:bold; margin-top:30px; margin-bottom:10px;">🍔 Фастфуд (Наказание)</div>
-<div class="item-card" style="background: #fff5f5; border: 1px solid #ff7675; flex-direction: column; gap: 10px;">
-    <div style="text-align:center; color: #d63031;">Если съела вредное — нажми кнопку ниже.</div>
-    <button class="btn btn-undo" id="btnFastFood">🍟 Я съела фастфуд (-1 ⭐️)</button>
-    <button class="btn" style="background: #636e72;" id="btnNoFastFood">🔄 Не ела / Ошибка (+1 ⭐️)</button>
-</div>
+        <div class="item-card" style="background: #fff5f5; border: 1px solid #ff7675; flex-direction: column; gap: 10px;">
+            <div style="text-align:center; color: #d63031;">Если съела вредное — нажми кнопку ниже.</div>
+            <button class="btn btn-undo" id="btnFastFood">🍟 Я съела фастфуд (-1 ⭐️)</button>
+            <button class="btn" style="background: #636e72;" id="btnNoFastFood">🔄 Не ела / Ошибка (+1 ⭐️)</button>
+        </div>
     </div>
 
     <div id="tab-shop" class="tab-content">
@@ -219,6 +201,18 @@
         </div>
     </div>
 
+    <div id="addGoalModal" class="modal">
+        <div class="modal-content">
+            <form id="goalForm">
+                <h3>Новая цель</h3>
+                <input type="text" name="name" placeholder="Название цели" required>
+                <input type="number" name="reward" placeholder="Награда (звезд)" required>
+                <button type="submit" class="btn btn-add">Добавить цель</button>
+                <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
+            </form>
+        </div>
+    </div>
+
     <div id="historyModal" class="modal">
         <div class="modal-content">
             <h3>История записей</h3>
@@ -242,35 +236,29 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var state = JSON.parse(localStorage.getItem('fitness_rpg_v5')) || {
-    stars: 0, stats: [], completedDates: [], shop: [], inventory: [], goals: []
-};
-// На случай, если у старых пользователей нет массива goals
-if (!state.goals) state.goals = [];
+                stars: 0, stats: [], completedDates: [], shop: [], inventory: [], goals: []
+            };
+            if (!state.goals) state.goals = [];
 
             var save = function() {
                 localStorage.setItem('fitness_rpg_v5', JSON.stringify(state));
                 document.getElementById('starDisplay').innerText = state.stars;
             };
 
-            // ФУНКЦИЯ ОБНОВЛЕНИЯ ПЕРСОНАЖА
             var updateCharacter = function(weight) {
                 var imgElement = document.getElementById('characterImage');
                 if (!imgElement) return;
-                
                 var stage = "stage1.png";
                 var w = parseFloat(weight);
-
-                if (w >= 68) { stage = "stage6.png"; }
-                else if (w >= 65) { stage = "stage5.png"; }
-                else if (w >= 62) { stage = "stage4.png"; }
-                else if (w >= 59) { stage = "stage3.png"; }
-                else if (w >= 56) { stage = "stage2.png"; }
-                else { stage = "stage1.png"; }
-
+                if (w >= 68) stage = "stage6.png";
+                else if (w >= 65) stage = "stage5.png";
+                else if (w >= 62) stage = "stage4.png";
+                else if (w >= 59) stage = "stage3.png";
+                else if (w >= 56) stage = "stage2.png";
+                else stage = "stage1.png";
                 imgElement.src = stage;
             };
 
-            // Навигация
             document.querySelectorAll('.nav-btn').forEach(function(btn) {
                 btn.onclick = function() {
                     document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
@@ -280,31 +268,26 @@ if (!state.goals) state.goals = [];
                     if (btn.getAttribute('data-tab') === 'tab-tasks') renderCalendar();
                 };
             });
-
-            // Модалки
             var openModal = function(id) { document.getElementById(id).style.display = 'flex'; };
             var closeModal = function() { document.querySelectorAll('.modal').forEach(function(m) { m.style.display = 'none'; }); };
+            
             document.getElementById('openAddStats').onclick = function() { openModal('addStatsModal'); };
             document.getElementById('openAddItem').onclick = function() { openModal('addItemModal'); };
+            document.getElementById('openAddGoal').onclick = function() { openModal('addGoalModal'); };
             document.getElementById('openHistory').onclick = function() { renderHistory(); openModal('historyModal'); };
             document.querySelectorAll('.close-modal').forEach(function(b) { b.onclick = closeModal; });
 
-            // Данные
             document.getElementById('statsForm').onsubmit = function(e) {
                 e.preventDefault();
-                var entry = {
+                state.stats.push({
                     id: Date.now(),
                     date: new Date().toLocaleDateString(),
                     weight: e.target.weight.value, fat: e.target.fat.value,
                     protein: e.target.protein.value, water: e.target.water.value,
                     waist: e.target.waist.value, chest: e.target.chest.value,
                     hips: e.target.hips.value, thigh: e.target.thigh.value, bicep: e.target.bicep.value
-                };
-                state.stats.push(entry); 
-                save(); 
-                renderStats(); 
-                closeModal(); 
-                e.target.reset();
+                });
+                save(); renderStats(); closeModal(); e.target.reset();
             };
 
             var renderStats = function() {
@@ -316,8 +299,6 @@ if (!state.goals) state.goals = [];
                     '<div>🔥 Жир: ' + last.fat + '%</div><div>🥩 Белок: ' + last.protein + '</div>' +
                     '<div>📏 Талия: ' + last.waist + ' см</div><div>📏 Грудь: ' + last.chest + ' см</div>' +
                     '<div>📏 Бедра: ' + last.hips + ' см</div><div>💪 Бицепс: ' + last.bicep + ' см</div>';
-                
-                // Вызываем обновление картинки
                 updateCharacter(last.weight);
             };
 
@@ -336,7 +317,6 @@ if (!state.goals) state.goals = [];
                 });
             };
 
-            // Календарь
             var currDate = new Date();
             var renderCalendar = function() {
                 var grid = document.getElementById('calendar'); grid.innerHTML = '';
@@ -347,7 +327,8 @@ if (!state.goals) state.goals = [];
                 for (var i = 1; i <= days; i++) {
                     var d = document.createElement('div'); d.className = 'day';
                     var key = y + '-' + m + '-' + i;
-                    if (state.completedDates.indexOf(key) !== -1) d.classList.add('completed');
+                    if (state.completedDates.indexOf(key) !== -1) d.classList.
+                        add('completed');
                     d.innerText = i; grid.appendChild(d);
                 }
             };
@@ -366,16 +347,15 @@ if (!state.goals) state.goals = [];
                 var d = new Date(); var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
                 if (state.completedDates.indexOf(key) !== -1) {
                     state.completedDates = state.completedDates.filter(function(k) { return k !== key; });
-                    state.stars = Math.max(0, state.stars - 1); save(); renderCalendar();
+                    state.stars -= 1; // Убрали Math.max(0)
+                    save(); renderCalendar();
                 }
             };
 
-            // Магазин
             document.getElementById('itemForm').onsubmit = function(e) {
                 e.preventDefault();
                 state.shop.push({ id: Date.now(), name: e.target.name.value, price: parseInt(e.target.price.value) });
-                save(); renderShop(); closeModal(); e.
-                    target.reset();
+                save(); renderShop(); closeModal(); e.target.reset();
             };
 
             window.deleteShopItem = function(id) {
@@ -401,6 +381,7 @@ if (!state.goals) state.goals = [];
 
             var renderShop = function() {
                 var sList = document.getElementById('shopList'); var iList = document.getElementById('inventoryList');
+                if(!sList || !iList) return;
                 sList.innerHTML = '';
                 state.shop.forEach(function(item) {
                     sList.innerHTML += '<div class="item-card"><span>' + item.name + ' (' + item.price + '⭐️)</span>' +
@@ -414,87 +395,63 @@ if (!state.goals) state.goals = [];
                 });
             };
 
-            save(); renderStats(); renderShop();
-            // --- ЛОГИКА ЦЕЛЕЙ ---
-            
-// Открытие модалки целей
-document.getElementById('openAddGoal').onclick = function() { 
-    openModal('addGoalModal'); 
-};
+            // ЛОГИКА ЦЕЛЕЙ
+            document.getElementById('goalForm').onsubmit = function(e) {
+                e.preventDefault();
+                state.goals.push({
+                    id: Date.now(),
+                    name: e.target.name.value,
+                    reward: parseInt(e.target.reward.value)
+                });
+                save(); renderGoals(); closeModal(); e.target.reset();
+            };
 
-// Сохранение новой цели
-document.getElementById('goalForm').onsubmit = function(e) {
-    e.preventDefault();
-    var goal = {
-        id: Date.now(),
-        name: e.target.name.value,
-        reward: parseInt(e.target.reward.value)
-    };
-    if (!state.goals) state.goals = [];
-    state.goals.push(goal);
-    save(); 
-    renderGoals(); 
-    closeModal();
-    e.target.reset();
-};
+            window.renderGoals = function() {
+                var gList = document.getElementById('goalsList');
+                if (!gList) return;
+                gList.innerHTML = '';
+                if (!state.goals || state.goals.length === 0) {
+                    gList.innerHTML = '<div style="color:#b2bec3; font-style:italic; padding:10px;">Нет активных целей</div>';
+                    return;
+                }
+                state.goals.forEach(function(g) {
+                    var card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = '<div><b>' + g.name + '</b> <span class="star-counter" style="font-size:12px">+' + g.reward + '⭐️</span></div>' +
+                        '<div style="display:flex; gap:5px;">' +
+                            '<button onclick="window.completeGoal(' + g.id + ')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
+                            '<button onclick="window.deleteGoal(' + g.id + ')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button>' +
+                        '</div>';
+                    gList.appendChild(card);
+                });
+            };
 
-// Отрисовка списка целей
-window.renderGoals = function() {
-    var gList = document.getElementById('goalsList');
-    if (!gList) return;
-    gList.innerHTML = '';
-    
-    if (!state.goals || state.goals.length === 0) {
-        gList.innerHTML = '<div style="color:#b2bec3; font-style:italic;">Нет активных целей</div>';
-        return;
-    }
-    
-    state.goals.forEach(function(g) {
-        var card = document.createElement('div');
-        card.className = 'item-card';
-        card.innerHTML = '<div><b>' + g.name + '</b> <span class="star-counter" style="font-size:12px">+' + g.reward + '⭐️</span></div>' +
-            '<div style="display:flex; gap:5px;">' +
-                '<button onclick="window.completeGoal(' + g.id + ')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
-                '<button onclick="window.deleteGoal(' + g.id + ')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button>' +
-            '</div>';
-        gList.appendChild(card);
-    });
-};
+            window.deleteGoal = function(id) {
+                state.goals = state.goals.filter(function(g) { return g.id !== id; });
+                save(); renderGoals();
+            };
 
-// Функции для кнопок внутри карточек
-window.deleteGoal = function(id) {
-    state.goals = state.goals.filter(function(g) { return g.id !== id; });
-    save(); 
-    renderGoals();
-};
+            window.completeGoal = function(id) {
+                var goal = state.goals.find(function(g) { return g.id === id; });
+                if (goal) {
+                    state.stars += goal.reward;
+                    state.goals = state.goals.filter(function(g) { return g.id !== id; });
+                    save(); renderGoals();
+                }
+            };
 
-window.completeGoal = function(id) {
-    var goal = state.goals.find(function(g) { return g.id === id; });
-    if (goal) {
-        state.stars += goal.reward;
-        state.goals = state.goals.filter(function(g) { return g.id !== id; });
-        save(); 
-        renderGoals();
-    }
-};
+            // ФАСТФУД
+            document.getElementById('btnFastFood').onclick = function() {
+                state.stars -= 1;
+                save();
+            };
 
-// --- ЛОГИКА ФАСТФУДА ---
+            document.getElementById('btnNoFastFood').onclick = function() {
+                state.stars += 1;
+                save();
+            };
 
-// Кнопка "Съела" (Минус 1 звезда, разрешаем отрицательные)
-document.getElementById('btnFastFood').onclick = function() {
-    state.stars -= 1;
-    save();
-};
-
-// Кнопка "Ошиблась" (Возвращаем 1 звезду)
-document.getElementById('btnNoFastFood').onclick = function() {
-    state.stars += 1;
-    save();
-};
-
-// Инициализация при загрузке
-if (!state.goals) state.goals = [];
-renderGoals();
+            save(); renderStats(); renderShop(); renderGoals();
         });
     </script>
 </body>
