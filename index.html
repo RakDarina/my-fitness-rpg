@@ -98,22 +98,26 @@
 
     .data-buttons {
         display: flex;
-        gap: 100px; 
+        gap: 10px; 
         margin-top: 20px;
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     .btn-small {
         flex: none !important; 
-        width: auto !important; 
-        padding: 25px 100px !important;
+        width: auto !important;
+        padding: 15px 30px !important; 
         font-size: 15px !important;
         white-space: nowrap;
         border-radius: 50px !important;
     }
 
     .item-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .item-info { display: flex; align-items: center; gap: 15px; }
+    .item-img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; background: #eee; }
+    .edit-link { font-size: 12px; color: var(--primary); cursor: pointer; text-decoration: underline; margin-left: 10px; }
 </style>
 </head>
 <body>
@@ -164,7 +168,7 @@
 
         <div style="font-weight:bold; margin-bottom:10px;">🎯 Глобальные цели</div>
         <div id="goalsList"></div>
-        <button class="btn btn-add" id="openAddGoal" style="margin-top:10px;">➕ Добавить цель</button>
+        <button class="btn btn-add" id="openAddGoal">➕ Добавить цель</button>
 
         <div style="font-weight:bold; margin-top:30px; margin-bottom:10px;">🍔 Фастфуд (Наказание)</div>
         <div class="item-card" style="background: #fff5f5; border: 1px solid #ff7675; flex-direction: column; gap: 10px;">
@@ -175,63 +179,32 @@
     </div>
 
     <div id="tab-shop" class="tab-content">
-        <div class="shop-title" style="font-weight:bold; margin-bottom:10px;">🛒 В магазине</div>
+        <div style="font-weight:bold; margin-bottom:10px;">🛒 В магазине</div>
         <div id="shopList"></div>
-        <div class="shop-title" style="font-weight:bold; margin:20px 0 10px;">🎒 Уже взяли</div>
+        <div style="font-weight:bold; margin:20px 0 10px;">🎒 Уже взяли</div>
         <div id="inventoryList"></div>
         <button class="btn btn-add" id="openAddItem" style="margin-top:20px;">➕ Добавить новый товар</button>
     </div>
+    <div id="addStatsModal" class="modal"><div class="modal-content"><form id="statsForm"><h3>Новая запись</h3><input type="number" step="0.1" name="weight" placeholder="Вес (кг)" required><input type="number" step="0.1" name="fat" placeholder="Жир (%)"><input type="number" step="0.1" name="protein" placeholder="Белок"><input type="number" step="0.1" name="water" placeholder="Вода"><input type="number" step="0.1" name="waist" placeholder="Талия (см)"><input type="number" step="0.1" name="chest" placeholder="Грудь (см)"><input type="number" step="0.1" name="hips" placeholder="Бедра (см)"><input type="number" step="0.1" name="thigh" placeholder="1 бедро (см)"><input type="number" step="0.1" name="bicep" placeholder="Бицепс (см)"><button type="submit" class="btn btn-add">Сохранить</button><button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button></form></div></div>
 
-    <div id="addStatsModal" class="modal">
-        <div class="modal-content">
-            <form id="statsForm">
-                <h3>Новая запись</h3>
-                <input type="number" step="0.1" name="weight" placeholder="Вес (кг)" required>
-                <input type="number" step="0.1" name="fat" placeholder="Жир (%)">
-                <input type="number" step="0.1" name="protein" placeholder="Белок">
-                <input type="number" step="0.1" name="water" placeholder="Вода">
-                <input type="number" step="0.1" name="waist" placeholder="Талия (см)">
-                <input type="number" step="0.1" name="chest" placeholder="Грудь (см)">
-                <input type="number" step="0.1" name="hips" placeholder="Бедра (см)">
-                <input type="number" step="0.1" name="thigh" placeholder="1 бедро (см)">
-                <input type="number" step="0.1" name="bicep" placeholder="Бицепс (см)">
-                <button type="submit" class="btn btn-add">Сохранить</button>
-                <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="addGoalModal" class="modal">
-        <div class="modal-content">
-            <form id="goalForm">
-                <h3>Новая цель</h3>
-                <input type="text" name="name" placeholder="Название цели" required>
-                <input type="number" name="reward" placeholder="Награда (звезд)" required>
-                <button type="submit" class="btn btn-add">Добавить цель</button>
-                <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="historyModal" class="modal">
-        <div class="modal-content">
-            <h3>История записей</h3>
-            <div id="historyList"></div>
-            <button class="btn btn-undo close-modal">Закрыть</button>
-        </div>
-    </div>
+    <div id="addGoalModal" class="modal"><div class="modal-content"><form id="goalForm"><h3>Новая цель</h3><input type="text" name="name" placeholder="Название цели" required><input type="number" name="reward" placeholder="Награда (звезд)" required><button type="submit" class="btn btn-add">Добавить цель</button><button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button></form></div></div>
 
     <div id="addItemModal" class="modal">
         <div class="modal-content">
             <form id="itemForm">
-                <h3>Новый товар</h3>
+                <h3 id="itemModalTitle">Новый товар</h3>
+                <input type="hidden" name="id">
                 <input type="text" name="name" placeholder="Название" required>
                 <input type="number" name="price" placeholder="Цена (звезд)" required>
-                <button type="submit" class="btn btn-add">Добавить в магазин</button>
+                <input type="url" name="link" placeholder="Ссылка на товар (необязательно)">
+                <input type="text" name="imgUrl" placeholder="Ссылка на картинку (необязательно)">
+                <button type="submit" class="btn btn-add" id="itemSubmitBtn">Добавить</button>
                 <button type="button" class="btn btn-undo close-modal" style="margin-top:5px">Отмена</button>
             </form>
         </div>
     </div>
+
+    <div id="historyModal" class="modal"><div class="modal-content"><h3>История записей</h3><div id="historyList"></div><button class="btn btn-undo close-modal">Закрыть</button></div></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -239,12 +212,18 @@
                 stars: 0, stats: [], completedDates: [], shop: [], inventory: [], goals: []
             };
             if (!state.goals) state.goals = [];
+            if (!state.shop) state.shop = [];
+            if (!state.inventory) state.inventory = [];
 
             var save = function() {
                 localStorage.setItem('fitness_rpg_v5', JSON.stringify(state));
                 document.getElementById('starDisplay').innerText = state.stars;
             };
 
+            var closeModal = function() { document.querySelectorAll('.modal').forEach(function(m) { m.style.display = 'none'; }); };
+            var openModal = function(id) { document.getElementById(id).style.display = 'flex'; };
+
+            // --- ПЕРСОНАЖ ---
             var updateCharacter = function(weight) {
                 var imgElement = document.getElementById('characterImage');
                 if (!imgElement) return;
@@ -259,29 +238,28 @@
                 imgElement.src = stage;
             };
 
+            // --- НАВИГАЦИЯ ---
             document.querySelectorAll('.nav-btn').forEach(function(btn) {
                 btn.onclick = function() {
-                    document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+                    document.querySelectorAll('.tab-content').
+                        forEach(function(t) { t.classList.remove('active'); });
                     document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
                     document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
                     btn.classList.add('active');
                     if (btn.getAttribute('data-tab') === 'tab-tasks') renderCalendar();
+                    if (btn.getAttribute('data-tab') === 'tab-shop') renderShop();
                 };
             });
-            var openModal = function(id) { document.getElementById(id).style.display = 'flex'; };
-            var closeModal = function() { document.querySelectorAll('.modal').forEach(function(m) { m.style.display = 'none'; }); };
-            
+
+            // --- ДАННЫЕ И ИСТОРИЯ ---
             document.getElementById('openAddStats').onclick = function() { openModal('addStatsModal'); };
-            document.getElementById('openAddItem').onclick = function() { openModal('addItemModal'); };
-            document.getElementById('openAddGoal').onclick = function() { openModal('addGoalModal'); };
             document.getElementById('openHistory').onclick = function() { renderHistory(); openModal('historyModal'); };
             document.querySelectorAll('.close-modal').forEach(function(b) { b.onclick = closeModal; });
 
             document.getElementById('statsForm').onsubmit = function(e) {
                 e.preventDefault();
                 state.stats.push({
-                    id: Date.now(),
-                    date: new Date().toLocaleDateString(),
+                    id: Date.now(), date: new Date().toLocaleDateString(),
                     weight: e.target.weight.value, fat: e.target.fat.value,
                     protein: e.target.protein.value, water: e.target.water.value,
                     waist: e.target.waist.value, chest: e.target.chest.value,
@@ -302,11 +280,6 @@
                 updateCharacter(last.weight);
             };
 
-            window.deleteStat = function(id) {
-                state.stats = state.stats.filter(function(s) { return s.id !== id; });
-                save(); renderStats(); renderHistory();
-            };
-
             var renderHistory = function() {
                 var hList = document.getElementById('historyList'); hList.innerHTML = '';
                 state.stats.slice().reverse().forEach(function(s) {
@@ -316,53 +289,78 @@
                         '<div style="font-size: 13px; margin-top:5px;">Вес: ' + s.weight + 'кг, Талия: ' + s.waist + '...</div></div>';
                 });
             };
+            window.deleteStat = function(id) { state.stats = state.stats.filter(function(s) { return s.id !== id; }); save(); renderStats(); renderHistory(); };
 
+            // --- КАЛЕНДАРЬ ---
             var currDate = new Date();
             var renderCalendar = function() {
                 var grid = document.getElementById('calendar'); grid.innerHTML = '';
-                var m = currDate.getMonth(); var y = currDate.getFullYear();
+                var m = currDate.getMonth(), y = currDate.getFullYear();
                 var monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
                 document.getElementById('monthYear').innerText = monthNames[m] + ' ' + y;
                 var days = new Date(y, m + 1, 0).getDate();
                 for (var i = 1; i <= days; i++) {
                     var d = document.createElement('div'); d.className = 'day';
                     var key = y + '-' + m + '-' + i;
-                    if (state.completedDates.indexOf(key) !== -1) d.classList.
-                        add('completed');
+                    if (state.completedDates.indexOf(key) !== -1) d.classList.add('completed');
                     d.innerText = i; grid.appendChild(d);
                 }
             };
-
             document.getElementById('prevMonth').onclick = function() { currDate.setMonth(currDate.getMonth() - 1); renderCalendar(); };
             document.getElementById('nextMonth').onclick = function() { currDate.setMonth(currDate.getMonth() + 1); renderCalendar(); };
-            
             document.getElementById('doTask').onclick = function() {
-                var d = new Date(); var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-                if (state.completedDates.indexOf(key) === -1) {
-                    state.completedDates.push(key); state.stars += 1; save(); renderCalendar();
-                } else { alert("Сегодня задание уже выполнено!"); }
+                var d = new Date(), key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+                if (state.completedDates.indexOf(key) === -1) { state.completedDates.push(key); state.stars += 1; save(); renderCalendar(); }
+                else { alert("Сегодня задание уже выполнено!"); }
+            };
+            document.getElementById('undoTask').onclick = function() {
+                var d = new Date(), key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+                if (state.completedDates.indexOf(key) !== -1) { state.completedDates = state.completedDates.filter(function(k) { return k !== key; }); state.stars -= 1; save(); renderCalendar(); }
             };
 
-            document.getElementById('undoTask').onclick = function() {
-                var d = new Date(); var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-                if (state.completedDates.indexOf(key) !== -1) {
-                    state.completedDates = state.completedDates.filter(function(k) { return k !== key; });
-                    state.stars -= 1; // Убрали Math.max(0)
-                    save(); renderCalendar();
-                }
+            // --- МАГАЗИН (С РЕДАКТИРОВАНИЕМ) ---
+            document.getElementById('openAddItem').onclick = function() {
+                document.getElementById('itemModalTitle').innerText = "Новый товар";
+                document.getElementById('itemSubmitBtn').innerText = "Добавить";
+                document.getElementById('itemForm').reset();
+                document.getElementById('itemForm').id.value = "";
+                openModal('addItemModal');
             };
 
             document.getElementById('itemForm').onsubmit = function(e) {
                 e.preventDefault();
-                state.shop.push({ id: Date.now(), name: e.target.name.value, price: parseInt(e.target.price.value) });
-                save(); renderShop(); closeModal(); e.target.reset();
+                var id = e.target.id.value;
+                var itemData = {
+                    id: id ? parseInt(id) : Date.now(),
+                    name: e.target.name.value,
+                    price: parseInt(e.target.price.value),
+                    link: e.target.link.value,
+                    imgUrl: e.target.imgUrl.value
+                };
+
+                if (id) {
+                    var idx = state.shop.findIndex(function(i) { return i.id === parseInt(id); });
+                    state.shop[idx] = itemData;
+                } else {
+                    state.shop.push(itemData);
+                }
+                save(); renderShop(); closeModal();
             };
 
-            window.deleteShopItem = function(id) {
-                state.shop = state.shop.filter(function(i) { return i.id !== id; });
-                save(); renderShop();
+            window.editItem = function(id) {
+                var item = state.shop.find(function(i) { return i.id === id; });
+                var form = document.getElementById('itemForm');
+                form.id.value = item.id;
+                form.name.value = item.name;
+                form.price.value = item.price;
+                form.link.value = item.link || "";
+                form.imgUrl.value = item.imgUrl || "";
+                document.getElementById('itemModalTitle').innerText = "Редактировать товар";
+                document.getElementById('itemSubmitBtn').innerText = "Сохранить изменения";
+                openModal('addItemModal');
             };
 
+            window.deleteShopItem = function(id) { state.shop = state.shop.filter(function(i) { return i.id !== id; }); save(); renderShop(); };
             window.buyItem = function(id) {
                 var idx = state.shop.findIndex(function(i) { return i.id === id; });
                 var item = state.shop[idx];
@@ -371,85 +369,55 @@
                     save(); renderShop();
                 } else { alert("Недостаточно звезд!"); }
             };
-
             window.returnItem = function(id) {
                 var idx = state.inventory.findIndex(function(i) { return i.id === id; });
                 var item = state.inventory[idx];
                 state.stars += item.price; state.shop.push(item); state.inventory.splice(idx, 1);
                 save(); renderShop();
-            };
+                };
 
             var renderShop = function() {
-                var sList = document.getElementById('shopList'); var iList = document.getElementById('inventoryList');
-                if(!sList || !iList) return;
+                var sList = document.getElementById('shopList'), iList = document.getElementById('inventoryList');
                 sList.innerHTML = '';
                 state.shop.forEach(function(item) {
-                    sList.innerHTML += '<div class="item-card"><span>' + item.name + ' (' + item.price + '⭐️)</span>' +
-                        '<div><button onclick="window.deleteShopItem(' + item.id + ')" style="background:none; border:none; cursor:pointer;">🗑</button>' +
-                        '<button class="btn-add" style="width:auto; padding:5px 10px; margin-left:10px;" onclick="window.buyItem(' + item.id + ')">Взять</button></div></div>';
+                    var imgHtml = item.imgUrl ? '<img src="'+item.imgUrl+'" class="item-img-preview">' : '<div class="item-img-preview"></div>';
+                    var nameHtml = item.link ? '<a href="'+item.link+'" target="_blank" style="color:var(--primary); font-weight:bold;">'+item.name+' 🔗</a>' : '<b>'+item.name+'</b>';
+                    sList.innerHTML += '<div class="item-card"><div class="item-info">' + imgHtml + '<div>' + nameHtml + 
+                        ' <span class="edit-link" onclick="window.editItem('+item.id+')">ред.</span><br><small>'+item.price+' ⭐️</small></div></div>' +
+                        '<div><button onclick="window.deleteShopItem('+item.id+')" style="background:none; border:none; cursor:pointer;">🗑</button>' +
+                        '<button class="btn-add" style="width:auto; padding:5px 10px; margin-left:10px;" onclick="window.buyItem('+item.id+')">Взять</button></div></div>';
                 });
                 iList.innerHTML = '';
                 state.inventory.forEach(function(item) {
-                    iList.innerHTML += '<div class="item-card"><span>' + item.name + '</span>' +
-                        '<button class="btn-undo" style="width:auto; padding:5px 10px;" onclick="window.returnItem(' + item.id + ')">Вернуть</button></div>';
+                    iList.innerHTML += '<div class="item-card"><span>' + item.name + '</span><button class="btn-undo" style="width:auto; padding:5px 10px;" onclick="window.returnItem('+item.id+')">Вернуть</button></div>';
                 });
             };
 
-            // ЛОГИКА ЦЕЛЕЙ
+            // --- ЦЕЛИ ---
+            document.getElementById('openAddGoal').onclick = function() { openModal('addGoalModal'); };
             document.getElementById('goalForm').onsubmit = function(e) {
                 e.preventDefault();
-                state.goals.push({
-                    id: Date.now(),
-                    name: e.target.name.value,
-                    reward: parseInt(e.target.reward.value)
-                });
+                state.goals.push({ id: Date.now(), name: e.target.name.value, reward: parseInt(e.target.reward.value) });
                 save(); renderGoals(); closeModal(); e.target.reset();
             };
-
             window.renderGoals = function() {
-                var gList = document.getElementById('goalsList');
-                if (!gList) return;
-                gList.innerHTML = '';
-                if (!state.goals || state.goals.length === 0) {
-                    gList.innerHTML = '<div style="color:#b2bec3; font-style:italic; padding:10px;">Нет активных целей</div>';
-                    return;
-                }
+                var gList = document.getElementById('goalsList'); gList.innerHTML = '';
+                if (!state.goals.length) { gList.innerHTML = '<div style="color:#b2bec3; font-style:italic; padding:10px;">Нет активных целей</div>'; return; }
                 state.goals.forEach(function(g) {
-                    var card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.innerHTML = '<div><b>' + g.name + '</b> <span class="star-counter" style="font-size:12px">+' + g.reward + '⭐️</span></div>' +
-                        '<div style="display:flex; gap:5px;">' +
-                            '<button onclick="window.completeGoal(' + g.id + ')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
-                            '<button onclick="window.deleteGoal(' + g.id + ')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button>' +
-                        '</div>';
-                    gList.appendChild(card);
+                    gList.innerHTML += '<div class="item-card"><div><b>'+g.name+'</b> <span style="font-size:12px; color:var(--success);">+'+g.reward+'⭐️</span></div>' +
+                        '<div style="display:flex; gap:5px;"><button onclick="window.completeGoal('+g.id+')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
+                        '<button onclick="window.deleteGoal('+g.id+')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button></div></div>';
                 });
             };
-
-            window.deleteGoal = function(id) {
-                state.goals = state.goals.filter(function(g) { return g.id !== id; });
-                save(); renderGoals();
-            };
-
+            window.deleteGoal = function(id) { state.goals = state.goals.filter(function(g) { return g.id !== id; }); save(); renderGoals(); };
             window.completeGoal = function(id) {
                 var goal = state.goals.find(function(g) { return g.id === id; });
-                if (goal) {
-                    state.stars += goal.reward;
-                    state.goals = state.goals.filter(function(g) { return g.id !== id; });
-                    save(); renderGoals();
-                }
+                if (goal) { state.stars += goal.reward; state.goals = state.goals.filter(function(g) { return g.id !== id; }); save(); renderGoals(); }
             };
 
-            // ФАСТФУД
-            document.getElementById('btnFastFood').onclick = function() {
-                state.stars -= 1;
-                save();
-            };
-
-            document.getElementById('btnNoFastFood').onclick = function() {
-                state.stars += 1;
-                save();
-            };
+            // --- ФАСТФУД ---
+            document.getElementById('btnFastFood').onclick = function() { state.stars -= 1; save(); };
+            document.getElementById('btnNoFastFood').onclick = function() { state.stars += 1; save(); };
 
             save(); renderStats(); renderShop(); renderGoals();
         });
