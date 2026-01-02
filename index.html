@@ -185,10 +185,11 @@
         <button class="btn btn-add" id="openAddGoal" style="margin-top:10px;">➕ Добавить цель</button>
 
         <div style="font-weight:bold; margin-top:30px; margin-bottom:10px;">🍔 Фастфуд (Наказание)</div>
-        <div class="item-card" style="background: #fff5f5; border: 1px solid #ff7675; flex-direction: column;">
-            <div style="text-align:center; margin-bottom:10px; color: #d63031;">Если съела вредное — нажми кнопку ниже.</div>
-            <button class="btn btn-undo" id="btnFastFood">🍟 Я съела фастфуд (-5 ⭐️)</button>
-        </div>
+<div class="item-card" style="background: #fff5f5; border: 1px solid #ff7675; flex-direction: column; gap: 10px;">
+    <div style="text-align:center; color: #d63031;">Если съела вредное — нажми кнопку ниже.</div>
+    <button class="btn btn-undo" id="btnFastFood">🍟 Я съела фастфуд (-1 ⭐️)</button>
+    <button class="btn" style="background: #636e72;" id="btnNoFastFood">🔄 Не ела / Ошибка (+1 ⭐️)</button>
+</div>
     </div>
 
     <div id="tab-shop" class="tab-content">
@@ -416,79 +417,85 @@ if (!state.goals) state.goals = [];
             save(); renderStats(); renderShop();
             // --- ЛОГИКА ЦЕЛЕЙ ---
             
-            // Открытие модалки целей
-            document.getElementById('openAddGoal').onclick = function() { openModal('addGoalModal'); };
+// Открытие модалки целей
+document.getElementById('openAddGoal').onclick = function() { 
+    openModal('addGoalModal'); 
+};
 
-            // Сохранение новой цели
-            document.getElementById('goalForm').onsubmit = function(e) {
-                e.preventDefault();
-                var goal = {
-                    id: Date.now(),
-                    name: e.target.name.value,
-                    reward: parseInt(e.target.reward.value)
-                };
-                state.goals.push(goal);
-                save(); renderGoals(); closeModal();
-                e.target.reset();
-            };
+// Сохранение новой цели
+document.getElementById('goalForm').onsubmit = function(e) {
+    e.preventDefault();
+    var goal = {
+        id: Date.now(),
+        name: e.target.name.value,
+        reward: parseInt(e.target.reward.value)
+    };
+    if (!state.goals) state.goals = [];
+    state.goals.push(goal);
+    save(); 
+    renderGoals(); 
+    closeModal();
+    e.target.reset();
+};
 
-            // Отрисовка списка целей
-            var renderGoals = function() {
-                var gList = document.getElementById('goalsList');
-                gList.innerHTML = '';
-                if (state.goals.length === 0) {
-                    gList.innerHTML = '<div style="color:#b2bec3; font-style:italic;">Нет активных целей</div>';
-                    return;
-                }
-                state.goals.forEach(function(g) {
-                    gList.innerHTML += 
-                    '<div class="item-card">' +
-                        '<div><b>' + g.name + '</b> <span class="star-counter" style="font-size:12px">+' + g.reward + '⭐️</span></div>' +
-                        '<div style="display:flex; gap:5px;">' +
-                            '<button onclick="window.completeGoal(' + g.id + ')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
-                            '<button onclick="window.deleteGoal(' + g.id + ')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button>' +
-                        '</div>' +
-                    '</div>';
-                });
-            };
+// Отрисовка списка целей
+window.renderGoals = function() {
+    var gList = document.getElementById('goalsList');
+    if (!gList) return;
+    gList.innerHTML = '';
+    
+    if (!state.goals || state.goals.length === 0) {
+        gList.innerHTML = '<div style="color:#b2bec3; font-style:italic;">Нет активных целей</div>';
+        return;
+    }
+    
+    state.goals.forEach(function(g) {
+        var card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = '<div><b>' + g.name + '</b> <span class="star-counter" style="font-size:12px">+' + g.reward + '⭐️</span></div>' +
+            '<div style="display:flex; gap:5px;">' +
+                '<button onclick="window.completeGoal(' + g.id + ')" class="btn" style="background:var(--success); width:auto; padding:8px;">✅</button>' +
+                '<button onclick="window.deleteGoal(' + g.id + ')" class="btn btn-undo" style="width:auto; padding:8px;">🗑</button>' +
+            '</div>';
+        gList.appendChild(card);
+    });
+};
 
-            // Функции окна (глобальные, чтобы работали из HTML)
-            window.deleteGoal = function(id) {
-                if(confirm('Удалить цель без награды?')) {
-                    state.goals = state.goals.filter(function(g) { return g.id !== id; });
-                    save(); renderGoals();
-                }
-            };
+// Функции для кнопок внутри карточек
+window.deleteGoal = function(id) {
+    state.goals = state.goals.filter(function(g) { return g.id !== id; });
+    save(); 
+    renderGoals();
+};
 
-            window.completeGoal = function(id) {
-                var goal = state.goals.find(function(g) { return g.id === id; });
-                if (goal) {
-                    if(confirm('Поздравляю! Выполнить цель и получить ' + goal.reward + ' звезд?')) {
-                        state.stars += goal.reward;
-                        // Удаляем цель после выполнения
-                        state.goals = state.goals.filter(function(g) { return g.id !== id; });
-                        save(); renderGoals();
-                    }
-                }
-            };
+window.completeGoal = function(id) {
+    var goal = state.goals.find(function(g) { return g.id === id; });
+    if (goal) {
+        state.stars += goal.reward;
+        state.goals = state.goals.filter(function(g) { return g.id !== id; });
+        save(); 
+        renderGoals();
+    }
+};
 
-            // --- ЛОГИКА ФАСТФУДА ---
-            document.getElementById('btnFastFood').onclick = function() {
-                if(confirm("Действительно съели фастфуд? Спишем 5 звезд за нарушение режима.")) {
-                    if (state.stars >= 5) {
-                        state.stars -= 5;
-                        alert("Эх... Минус 5 звезд. Завтра постарайтесь питаться правильно!");
-                    } else {
-                        state.stars = 0;
-                        alert("Звезд и так нет, но совесть чиста (теперь 0).");
-                    }
-                    save();
-                }
-            };
+// --- ЛОГИКА ФАСТФУДА ---
 
-            // Не забудьте вызвать отрисовку целей при старте!
-            renderGoals();
-        });
+// Кнопка "Съела" (Минус 1 звезда, разрешаем отрицательные)
+document.getElementById('btnFastFood').onclick = function() {
+    state.stars -= 1;
+    save();
+};
+
+// Кнопка "Ошиблась" (Возвращаем 1 звезду)
+document.getElementById('btnNoFastFood').onclick = function() {
+    state.stars += 1;
+    save();
+};
+
+// Инициализация при загрузке
+if (!state.goals) state.goals = [];
+renderGoals();
+        
     </script>
 </body>
 </html>
