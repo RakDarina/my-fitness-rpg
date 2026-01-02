@@ -153,6 +153,11 @@
         .modal-content input:focus { border-color: var(--primary-light); }
 
         hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
+        
+        /* СТИЛИ ДЛЯ ИИ (Новое) */
+        .ai-header-card { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; text-align: left; align-items: flex-start; }
+        .ai-progress-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.3); border-radius: 10px; margin-top: 15px; overflow: hidden; }
+        .ai-progress-fill { height: 100%; background: #00b894; width: 0%; transition: width 0.5s ease; }
     </style>
 </head>
 <body>
@@ -162,7 +167,7 @@
         <nav class="nav">
             <button class="nav-btn active" data-tab="tab-data">Данные</button>
             <button class="nav-btn" data-tab="tab-tasks">Задания</button>
-            <button class="nav-btn" data-tab="tab-shop">Магазин</button>
+            <button class="nav-btn" data-tab="tab-ai">🤖 ИИ</button> <button class="nav-btn" data-tab="tab-shop">Магазин</button>
         </nav>
         <div class="header-right">
             <div class="star-counter">⭐️ <span id="starDisplay">0</span></div>
@@ -187,6 +192,48 @@
         </div>
     </div>
 
+    <div id="tab-ai" class="tab-content">
+        <div class="hero-card ai-header-card">
+            <h2 style="margin:0;">🤖 ИИ-Наставник</h2>
+            <div id="ai-prediction" style="font-size: 1.1rem; font-weight: bold; margin-top: 10px;">
+                Анализирую данные...
+            </div>
+            <div id="ai-days-left" style="font-size: 0.9rem; opacity: 0.9;">
+                Сделай замеры, чтобы я составил прогноз.
+            </div>
+            <div class="ai-progress-bg">
+                <div id="ai-progress-fill" class="ai-progress-fill"></div>
+            </div>
+            <div id="ai-achievement" style="margin-top:15px; background:rgba(255,255,255,0.2); padding:5px 12px; border-radius:10px; font-size:0.85rem;">
+                🎖 Ранг: Новичок
+            </div>
+        </div>
+
+        <div class="hero-layout" style="margin-top: 25px;">
+            <div class="hero-card" style="align-items: flex-start;">
+                <h4 style="margin: 0 0 15px 0; color: var(--primary);">🎯 Твоя цель</h4>
+                <div style="width: 100%; display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="number" id="targetWeightInput" placeholder="Цель (кг)" style="margin:0; padding: 10px; width: 60%;">
+                    <button class="btn btn-add" onclick="runAIAnalysis()" style="width:auto; padding: 10px 20px;">Ок</button>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-sub);">Введи желаемый вес, и я рассчитаю дату успеха.</p>
+            </div>
+            
+            <div class="hero-card" style="align-items: flex-start;">
+                <h4 style="margin: 0 0 15px 0; color: var(--success);">📋 План на сегодня</h4>
+                <div id="ai-plan-text" style="font-size: 0.9rem; color: var(--text-sub); width: 100%;">
+                    Загрузка плана...
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-card" style="align-items: flex-start; background: #fff8e1; border: 1px solid #ffe082;">
+            <h4 style="margin: 0 0 10px 0; color: #f39c12;">💡 Умная подсказка</h4>
+            <div id="ai-tip" style="font-style: italic; color: var(--text-main);">
+                "Маленькие шаги ведут к большим победам."
+            </div>
+        </div>
+    </div>
     <div id="tab-tasks" class="tab-content">
         <div class="calendar-wrapper">
             <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -234,7 +281,6 @@
     <div id="historyModal" class="modal"><div class="modal-content"><h3>История записей</h3><div id="historyList"></div><button class="btn btn-undo close-modal" style="width:100%; margin-top:15px;">Закрыть</button></div></div>
 
     <script>
-        // --- ВЕСЬ ТВОЙ JS КОД БЕЗ ИЗМЕНЕНИЙ В ЛОГИКЕ ---
         document.addEventListener('DOMContentLoaded', function() {
             var state = JSON.parse(localStorage.getItem('fitness_rpg_v5')) || {
                 stars: 0, stats: [], completedDates: [], shop: [], inventory: [], goals: []
@@ -273,6 +319,7 @@
                     btn.classList.add('active');
                     if (btn.getAttribute('data-tab') === 'tab-tasks') renderCalendar();
                     if (btn.getAttribute('data-tab') === 'tab-shop') renderShop();
+                    if (btn.getAttribute('data-tab') === 'tab-ai') runAIAnalysis(); // ДОБАВЛЕНО
                 };
             });
 
@@ -434,6 +481,89 @@
 
             document.getElementById('btnFastFood').onclick = function() { state.stars -= 1; save(); };
             document.getElementById('btnNoFastFood').onclick = function() { state.stars += 1; save(); };
+            
+            // --- ЛОГИКА ИИ (НОВАЯ) ---
+            window.runAIAnalysis = function() {
+                var savedTarget = localStorage.getItem('ai_target_weight') || 55;
+                document.getElementById('targetWeightInput').value = savedTarget;
+                
+                var last = state.stats[state.stats.length - 1];
+                var aiPredict = document.getElementById('ai-prediction');
+                var aiDays = document.getElementById('ai-days-left');
+                var aiFill = document.getElementById('ai-progress-fill');
+                
+                if (!last) {
+                    aiPredict.innerText = "Нет данных для анализа";
+                    aiDays.innerText = "Пожалуйста, добавь первый замер веса во вкладке «Данные».";
+                    return;
+                }
+                
+                // Сохраняем цель
+                var inputVal = document.getElementById('targetWeightInput').value;
+                if(inputVal) {
+                    localStorage.setItem('ai_target_weight', inputVal);
+                    savedTarget = inputVal;
+                }
+                
+                var currentW = parseFloat(last.weight);
+                var targetW = parseFloat(savedTarget);
+                
+                // План питания и воды
+                var calories = Math.round(currentW * 24 * 1.2);
+                document.getElementById('ai-plan-text').innerHTML = `
+                    <ul style="padding-left:20px; margin:0;">
+                        <li>💧 Вода: <b>${(currentW * 0.033).toFixed(1)} л</b></li>
+                        <li>🥩 Белок: <b>${(currentW * 1.5).toFixed(0)} г</b></li>
+                        <li>🔥 Калории: <b>${calories - 300} - ${calories} ккал</b></li>
+                    </ul>
+                `;
+                
+                // Ачивки
+                var rank = "Новичок";
+                if(state.stars > 20) rank = "Бывалый Атлет";
+                if(state.stars > 50) rank = "Легенда Фитнеса";
+                document.getElementById('ai-achievement').innerText = "🎖 Ранг: " + rank;
+                
+                // Умная подсказка (Плато)
+                var tipText = "Сон — это лучший жиросжигатель. Спи 8 часов.";
+                if(state.stats.length >= 3) {
+                   var recent = state.stats.slice(-3);
+                   var diff = Math.abs(parseFloat(recent[recent.length-1].weight) - parseFloat(recent[0].weight));
+                   if(diff < 0.3) tipText = "⚠️ Кажется, вес встал (Плато). Устрой сегодня день отдыха или добавь 200 ккал, чтобы разогнать метаболизм.";
+                   else tipText = "🔥 Отличный темп! Жир плавится. Продолжай пить воду.";
+                }
+                document.getElementById('ai-tip').innerHTML = "<i>" + tipText + "</i>";
+
+                // Прогноз даты
+                if (state.stats.length >= 2) {
+                    var first = state.stats[0];
+                    var totalDiff = parseFloat(first.weight) - currentW;
+                    var daysDiff = (last.id - first.id) / (1000 * 60 * 60 * 24);
+                    
+                    if (totalDiff > 0.1 && daysDiff > 0.5) {
+                        var speed = totalDiff / daysDiff; // кг в день
+                        var left = currentW - targetW;
+                        var daysNeeded = Math.round(left / speed);
+                        
+                        if(daysNeeded > 0) {
+                            var date = new Date();
+                            date.setDate(date.getDate() + daysNeeded);
+                            aiPredict.innerText = "Цель: " + date.toLocaleDateString('ru-RU', {day:'numeric', month:'long'});
+                            aiDays.innerText = `Осталось сбросить ${left.toFixed(1)} кг (примерно ${daysNeeded} дн.)`;
+                            
+                            // Шкала
+                            var totalToLose = parseFloat(first.weight) - targetW;
+                            var percent = ((parseFloat(first.weight) - currentW) / totalToLose) * 100;
+                            aiFill.style.width = Math.min(100, Math.max(5, percent)) + "%";
+                            return;
+                        }
+                    }
+                }
+                
+                aiPredict.innerText = "Сбор данных...";
+                aiDays.innerText = "Мне нужно еще пару дней замеров, чтобы рассчитать точную дату.";
+                aiFill.style.width = "5%";
+            };
 
             save(); renderStats(); renderShop(); renderGoals();
         });
