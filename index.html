@@ -159,14 +159,21 @@
 </div>
     </div>
 
-    <div id="tab-tasks" class="tab-content">
+     <div id="tab-tasks" class="tab-content">
         <div style="text-align:center; margin-bottom: 20px;"><b>1 час на дорожке = 1 ⭐️</b></div>
         <div style="display:flex; justify-content: space-between; align-items: center;">
-            <button id="prevMonth" style="border:none; background:none; cursor:pointer; font-size:20px;">◀️</button>
-            <span id="monthYear" style="font-weight:bold; font-size: 1.1rem;"></span>
-            <button id="nextMonth" style="border:none; background:none; cursor:pointer; font-size:20px;">▶️</button>
-        </div>
+    <button id="prevMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
+        <img src="lev.png" alt="Назад" style="width: 30px; height: auto;">
+    </button>
+    
+    <span id="monthYear" style="font-weight:bold; font-size: 1.1rem;"></span>
+    
+    <button id="nextMonth" style="border:none; background:none; cursor:pointer; padding: 0;">
+        <img src="prav.png" alt="Вперед" style="width: 30px; height: auto;">
+    </button>
+</div>
         <div class="calendar-grid" id="calendar"></div>
+        
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn" style="background: var(--success);" id="doTask">✅ Выполнить</button>
             <button class="btn btn-undo" id="undoTask">❌ Отменить</button>
