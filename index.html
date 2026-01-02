@@ -427,19 +427,23 @@
                     save(); renderShop();
                 } else { alert("Недостаточно звезд!"); }
             };
-            
+
             window.renderShop = function() {
                 var sList = document.getElementById('shopList'), iList = document.getElementById('inventoryList');
                 sList.innerHTML = '';
                 state.shop.forEach(function(item) {
                     sList.innerHTML += `<div class="item-card">
-                        <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="display:flex; align-items:center; gap:12px; flex: 1;">
                             <div style="width:50px; height:50px; background:#f1f2f6; border-radius:10px; overflow:hidden;">
                                 ${item.imgUrl ? `<img src="${item.imgUrl}" style="width:100%; height:100%; object-fit:cover;">` : ''}
                             </div>
                             <div><b>${item.name}</b><br><small style="color:var(--success)">${item.price} ⭐️</small></div>
                         </div>
-                        <button class="btn btn-add" style="width:auto; padding:6px 12px; font-size:12px;" onclick="window.buyItem(${item.id})">Взять</button>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn" style="width:auto; padding:6px; background:#edf2f7; color:var(--text-sub);" onclick="window.editItem(${item.id})">✏️</button>
+                            <button class="btn" style="width:auto; padding:6px; background:#fee2e2; color:var(--danger);" onclick="window.deleteItem(${item.id})">🗑</button>
+                            <button class="btn btn-add" style="width:auto; padding:6px 12px; font-size:12px;" onclick="window.buyItem(${item.id})">Взять</button>
+                        </div>
                     </div>`;
                 });
                 iList.innerHTML = '';
@@ -447,6 +451,29 @@
                     iList.innerHTML += `<div class="item-card"><span>${item.name}</span><button class="btn btn-undo" style="width:auto; padding:5px 10px; font-size:12px;" onclick="window.returnItem(${item.id})">Вернуть</button></div>`;
                 });
             };
+
+            // Добавь эти функции ниже:
+            window.editItem = function(id) {
+                var item = state.shop.find(function(i) { return i.id === id; });
+                if (!item) return;
+                var form = document.getElementById('itemForm');
+                form.id.value = item.id;
+                form.name.value = item.name;
+                form.price.value = item.price;
+                form.link.value = item.link || '';
+                form.imgUrl.value = item.imgUrl || '';
+                document.getElementById('itemModalTitle').innerText = "Редактировать";
+                openModal('addItemModal');
+            };
+
+            window.deleteItem = function(id) {
+                if(confirm("Удалить этот товар из магазина?")) {
+                    state.shop = state.shop.filter(function(i) { return i.id !== id; });
+                    save(); renderShop();
+                }
+            };
+
+            
             window.returnItem = function(id) {
                 var idx = state.inventory.findIndex(function(i) { return i.id === id; });
                 var item = state.inventory[idx];
