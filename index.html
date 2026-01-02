@@ -39,7 +39,21 @@
             box-shadow: 0 2px 15px rgba(0,0,0,0.04); z-index: 1000;
         }
 
-        .site-title { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; flex: 1; }
+        .site-title { 
+    font-weight: 800; 
+    font-size: 1.1rem; 
+    letter-spacing: -0.5px; 
+    flex: 1; 
+    display: flex;       /* Добавлено */
+    align-items: center; /* Добавлено */
+    gap: 10px;           /* Добавлено (отступ между фото и текстом) */
+}
+
+.logo-img {
+    height: 35px;        /* Высота логотипа */
+    width: auto;
+    object-fit: contain;
+}
         
         .nav { display: flex; gap: 5px; flex: 2; justify-content: center; }
         
@@ -163,7 +177,10 @@
 <body>
 
     <header class="header">
-        <div class="site-title">Fitness RPG</div>
+        <div class="site-title">
+    <img src="favicon.png" alt="L" style="height: 30px; width: auto;">
+    Fitness RPG
+</div>
         <nav class="nav">
             <button class="nav-btn active" data-tab="tab-data">Данные</button>
             <button class="nav-btn" data-tab="tab-tasks">Задания</button>
